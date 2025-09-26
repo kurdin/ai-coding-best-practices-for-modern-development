@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code with AI: Brown Bag for Developers</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            background: #1a1a2e;
+        }
+        
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            padding: 80px;
+            display: none;
+            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+            position: relative;
+            overflow: auto;
+        }
+        
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .slide-number {
+            position: absolute;
+            bottom: 30px;
+            right: 40px;
+            color: #666;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 56px;
+            margin-bottom: 30px;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+        
+        h2 {
+            color: #0047BA;
+            font-size: 48px;
+            margin-bottom: 40px;
+            font-weight: 500;
+            border-bottom: 4px solid #0047BA;
+            padding-bottom: 15px;
+        }
+        
+        h3 {
+            color: #2c3e50;
+            font-size: 32px;
+            margin-bottom: 25px;
+            margin-top: 35px;
+            font-weight: 500;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 32px;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+        
+        .presenter {
+            color: #34495e;
+            font-size: 22px;
+            margin-top: 40px;
+            font-style: italic;
+            line-height: 1.6;
+        }
+        
+        ul {
+            list-style: none;
+            padding-left: 0;
+            flex-grow: 1;
+        }
+        
+        li {
+            color: #2c3e50;
+            font-size: 28px;
+            margin-bottom: 20px;
+            padding-left: 45px;
+            position: relative;
+            line-height: 1.4;
+        }
+        
+        li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #0047BA;
+            font-weight: bold;
+            font-size: 32px;
+        }
+        
+        li ul {
+            margin-top: 15px;
+        }
+        
+        li ul li {
+            font-size: 24px;
+            padding-left: 35px;
+            color: #555;
+            margin-bottom: 12px;
+        }
+        
+        li ul li:before {
+            content: "•";
+            font-size: 24px;
+            color: #9b59b6;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 25px;
+            margin: 30px 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #856404;
+        }
+        
+        .emphasis {
+            background: #0047BA;
+            color: white;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        
+        .warning {
+            background: #fee;
+            border-left: 5px solid #dc3545;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 4px;
+            font-size: 24px;
+            color: #721c24;
+        }
+        
+        .success {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 4px;
+            font-size: 24px;
+            color: #155724;
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px 30px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+            pointer-events: none;
+        }
+        
+        .controls.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .controls:hover {
+            opacity: 1 !important;
+        }
+        
+        /* Hover zone to trigger controls */
+        .controls-trigger {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 120px;
+            z-index: 999;
+        }
+        
+        .controls-trigger:hover ~ .controls {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        button {
+            background: #0047BA;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #5a67d8;
+            transform: scale(1.05);
+        }
+        
+        button:disabled {
+            background: #4a5568;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+        
+        .slide-counter {
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .title-slide {
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0047BA 0%, #0047BA 100%);
+        }
+        
+        .title-slide h1 {
+            font-size: 72px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .title-slide .subtitle {
+            color: #e0e0e0;
+            font-size: 36px;
+        }
+        
+        .title-slide .presenter {
+            color: white;
+            font-size: 24px;
+            margin-top: 50px;
+        }
+        
+        .title-slide ul {
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .title-slide li {
+            color: white;
+        }
+        
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: start;
+        }
+        
+        .compact li {
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+        
+        .compact li ul li {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+        
+        code {
+            background: #e0e0e0;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+        }
+        
+        /* Keyboard hint */
+        .keyboard-hint {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .keyboard-hint.visible {
+            opacity: 1;
+        }
+        
+        @media print {
+            .controls, .controls-trigger, .keyboard-hint {
+                display: none;
+            }
+            .slide {
+                page-break-after: always;
+                display: block !important;
+                height: auto;
+                padding: 40px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .slide {
+                padding: 40px;
+            }
+            h1 { font-size: 36px; }
+            h2 { font-size: 32px; }
+            li { font-size: 20px; }
+            li ul li { font-size: 18px; }
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Keyboard hint -->
+    <div class="keyboard-hint" id="keyboardHint">
+        Use ← → arrow keys or Space to navigate
+    </div>
+
+    <!-- Slide 1: Title -->
+    <div class="slide active title-slide">
+        <h1>Code with AI</h1>
+        <div class="subtitle">AI Coding Best Practices for Modern Development</div>
+        <div class="presenter">
+            <strong>Sergey Kurdin</strong><br>
+            Senior Developer at Charles River Labs (Apollo SA project)<br>
+            30+ years building software<br>
+            Built and shipped products at Marriott.com, Ski.com, It.com, Amazon, NIH, and multiple startups<br>
+            PasteBar App Maintainer - Free, Open Source Clipboard Manager for Mac & Windows (1.7k★ on GitHub)
+        </div>
+        <div class="slide-number">2 / 29</div>
+    </div>
+
+    <!-- Slide 2: Agenda -->
+    <div class="slide">
+        <h2>Agenda</h2>
+        <ul>
+            <li><strong>Foundation:</strong> Why AI coding now & mindset shift</li>
+            <li><strong>Understanding AI:</strong> How LLMs work & context windows</li>
+            <li><strong>Best Practices:</strong> Prompting patterns & planning-first approach</li>
+            <li><strong>Git Workflow:</strong> Safe version control & incremental commits</li>
+            <li><strong>CLI-first Agents:</strong> Essential commands & workflow</li>
+            <li><strong>Quality Control:</strong> Testing, reviews & catching bad patterns</li>
+            <li><strong>Limits & Safety:</strong> When NOT to use AI & security guardrails</li>
+            <li><strong>Human Skills:</strong> What matters MORE with AI</li>
+            <li><strong>Key Takeaways:</strong> Start small, verify everything</li>
+        </ul>
+        <div class="slide-number">2 / 29</div>
+    </div>
+
+    <!-- Slide 3: History -->
+    <div class="slide">
+        <h2>Evolution of AI-Assisted Coding</h2>
+        <ul>
+            <li><strong>Early Tools</strong>
+                <ul>
+                    <li>Syntax highlighting → Better readability</li>
+                    <li>Linting & type checking → Fewer mistakes</li>
+                </ul>
+            </li>
+            <li><strong>AI Breakthrough</strong>
+                <ul>
+                    <li>ChatGPT 3.5 → Natural language Q&A</li>
+                    <li>GitHub Copilot → Inline autocomplete</li>
+                </ul>
+            </li>
+            <li><strong>Modern Coding Agents</strong>
+                <ul>
+                    <li>Claude Code, Codex CLI, Cursor, Gemini Code Assist, Windsurf</li>
+                    <li>Understand repo structure & context</li>
+                    <li>Planning first, then implementation</li>
+                    <li>Plan → apply small step → test → iterate (repo-aware, reviewable edits)</li>
+                </ul>
+            </li>
+        </ul>
+        <div class="slide-number">3 / 29</div>
+    </div>
+
+    <!-- Slide 4: Why AI Now -->
+    <div class="slide">
+        <h2>Why AI for Developers — Now</h2>
+        <ul>
+            <li><span class="emphasis">Less typing, more steering</span></li>
+            <li>Fast refactors and unit tests in minutes; iterate on implementation variants</li>
+            <li>Faster documentation and code reviews</li>
+            <li>Learns and follows your repo's patterns</li>
+            <li>Produces code aligned with project style</li>
+        </ul>
+        <div class="success">
+            ✓ You guide, review, and accept<br>
+            ✓ AI accelerates mechanics<br>
+            ✓ You own design and code quality
+        </div>
+        <div style="background: #d4f4dd; padding: 15px; border-radius: 8px; margin-top: 20px; border: 1px solid #22c55e;">
+            <p style="margin: 0; font-size: 18px; color: #166534;">
+                <strong>💡 Pro Tip:</strong> Generate and reuse AGENTS.md file with repo-specific instructions
+            </p>
+        </div>
+        <div class="slide-number">4 / 29</div>
+    </div>
+
+    <!-- Slide 5: Current Tools -->
+    <div class="slide">
+        <h2>Current Tooling Landscape</h2>
+        <ul>
+            <li><strong>Autocomplete Copilots</strong>
+                <ul>
+                    <li>GitHub Copilot, Codeium, TabNine</li>
+                    <li>Inline suggestions while typing</li>
+                </ul>
+            </li>
+            <li><strong>Chat Assistants</strong>
+                <ul>
+                    <li>ChatGPT, Claude, Gemini</li>
+                    <li>Architecture and design decisions</li>
+                    <li>Q&A and code generation via chat</li>
+                </ul>
+            </li>
+            <li><strong>CLI-first Coding Agents</strong> <span class="emphasis">Most Powerful</span>
+                <ul>
+                    <li>Codex CLI, Claude Code, Cursor, Windsurf</li>
+                    <li>Understand entire repository structure</li>
+                    <li>Plan → Review → Implement workflow</li>
+                    <li>Direct file editing with reviewable changes</li>
+                </ul>
+            </li>
+        </ul>
+        <div class="success">
+            ✓ Focus on patterns, not specific tools — they all follow similar principles
+        </div>
+        <div class="slide-number">5 / 29</div>
+    </div>
+
+    <!-- Slide 6: Mindset Shift -->
+    <div class="slide">
+        <h2>The Mindset Shift</h2>
+        <ul>
+            <li>Build <span class="emphasis">systems that solve problems</span></li>
+            <li>Shift from <strong>coder → architect</strong></li>
+            <li>AI learns from your repo and suggests solutions; you guide and control</li>  
+            <li><strong>Your new responsibilities:</strong>
+                <ul>
+                    <li>Define the problem clearly</li>
+                    <li>Curate context carefully</li>
+                    <li>Review changes thoroughly</li>
+                    <li>Enforce quality gates</li>
+                </ul>
+            </li>
+            <li>Result: <span class="highlight">Fewer keystrokes, more impact</span> and <span class="highlight">fewer typing mistakes</span></li>
+        </ul>
+        <div class="slide-number">3 / 29</div>
+    </div>
+
+    <!-- Slide 7: What is AI -->
+    <div class="slide">
+        <h2>What is AI? (LLMs in 2 Minutes)</h2>
+        <ul>
+            <li><span class="emphasis">AI = Large Language Models</span> trained on text/code patterns</li>
+            <li>They're <span class="highlight">NOT databases</span> or compilers</li>
+            <li>They <span class="emphasis">predict the next token</span> given prior tokens</li>
+            <li><strong>Strengths:</strong>
+                <ul>
+                    <li>Pattern recall & style mimicry</li>
+                    <li>Fast scaffolding</li>
+                    <li>Broad knowledge base</li>
+                </ul>
+            </li>
+            <li><strong>Weaknesses:</strong>
+                <ul>
+                    <li>Hallucinations (confident but wrong)</li>
+                    <li>No true runtime awareness</li>
+                </ul>
+            </li>
+        </ul>
+        <div class="warning">
+            ⚠️ "Autocomplete on steroids" - not a truth engine
+        </div>
+        <div class="slide-number">4 / 29</div>
+    </div>
+
+    <!-- Slide 8: How LLMs Generate Code -->
+    <div class="slide">
+        <h2>How LLMs Generate Code</h2>
+        <ul>
+            <li><span class="emphasis">Tokenization → Probabilities → Decoding</span></li>
+            <li>Output quality depends on:
+                <ul>
+                    <li>Prompt clarity</li>
+                    <li>Curated context</li>
+                    <li>Explicit constraints</li>
+                </ul>
+            </li>
+            <li><span class="highlight">Temperature</span> controls creativity vs safety</li>
+            <li>Outputs can vary—build, run, and test to validate</li>
+        </ul>
+        <div class="success">
+            ✓ Best Practice: Ask for plans first, then for implementation<br>
+            ✓ Keep changes smaller and under control<br>
+            ✓ Compile, run, manual test, unit tests
+        </div>
+        <div class="slide-number">5 / 29</div>
+    </div>
+
+    <!-- Slide 9: Context Windows -->
+    <div class="slide">
+        <h2>Understanding Models and Context Windows</h2>
+        <ul>
+            <li><strong>Model Context Limits:</strong>
+                <ul>
+                    <li>Model context windows vary by provider (hundreds of thousands of tokens)</li>
+                    <li>Effective usable window is always smaller than advertised</li>
+                </ul>
+            </li>
+            <li><strong>What Makes Models Different:</strong>
+                <ul>
+                    <li>Training data: General text vs code repositories</li>
+                    <li>Architecture: Base vs instruction-tuned vs code-specialized, fine tuning</li>
+                    <li>Optimization: Next-token prediction; instruction-tuning and tool use enable task completion</li>
+                </ul>
+            </li>
+            <li><strong>Why Specialization Matters:</strong>
+                <ul>
+                    <li>General models: Great explanations, weaker syntax</li>
+                    <li>Code models: Strong patterns, weaker natural language</li>
+                </ul>
+            </li>
+        </ul>
+        <div class="success">
+            ✓ Code models trained on millions of patterns<br>
+            ✓ Choose model based on task: coding vs explaining<br>
+        </div>
+        <div class="slide-number">6 / 29</div>
+    </div>
+
+    <!-- Slide 10: Why Context Matters -->
+    <div class="slide">
+        <h2>Why Context Matters</h2>
+        <ul>
+            <li>Models only see a <span class="emphasis">limited window</span></li>
+            <li>Too much context → <span class="highlight">truncation</span> of critical code</li>
+            <li>Provide only minimal relevant files plus explicit acceptance criteria and constraints</li>
+            <li><strong>Context priority order (what to include):</strong>
+                <ul>
+                    <li>1. Current error messages & stack traces</li>
+                    <li>2. Files you're editing & their imports</li>
+                    <li>3. Related type definitions & interfaces</li>
+                    <li>4. Relevant test files</li>
+                    <li>5. Project config (package.json, tsconfig)</li>
+                </ul>
+            </li>
+
+        </ul>
+        <div class="success">
+            ✓ Mantra: Curate → Confirm → Constrain → Verify
+        </div>
+        <div class="slide-number">7 / 29</div>
+    </div>
+
+    <!-- Slide 11: Confidence Problem -->
+    <div class="slide">
+        <h2>The Confidence Calibration Problem</h2>
+        <ul>
+            <li>LLMs are <span class="highlight">always confident</span>, even when wrong</li>
+            <li>No built-in "I don't know" mechanism</li>
+            <li><strong>Red flags to watch:</strong>
+                <ul>
+                    <li>Inventing APIs that don't exist</li>
+                    <li>Using deprecated methods confidently</li>
+                    <li>Creating strange-sounding features</li>
+                </ul>
+            </li>
+            <li><strong>Mitigation strategies:</strong>
+                <ul>
+                    <li>Cross-check with your knowledge and official docs; assume unfamiliar APIs are suspect</li>
+                    <li>Extra caution with new libraries, new APIs</li>
+                    <li>Track hallucination patterns and ask for clarification or start over</li>
+                </ul>
+            </li>
+        </ul>
+        <div class="warning">
+            ⚠️ Example: useState2(), Array.prototype.contains() (non-existent)
+        </div>
+        <div class="slide-number">8 / 29</div>
+    </div>
+
+    <!-- Slide 12: Mental Model -->
+    <div class="slide">
+        <h2>Mental Model: Architecting with AI</h2>
+        <ul>
+            <li>Decompose tasks → Write acceptance criteria</li>
+            <li>Constrain scope → Request <span class="emphasis">small changes</span></li>
+            <li>Iterate quickly → Run, test, review each step</li>
+            <li>Treat AI like a <strong>junior developer</strong>
+                <ul>
+                    <li>Ask to plan first</li>
+                    <li>Ask why you need to change</li>
+                    <li>Request alternatives</li>
+                    <li>Trust, but verify: compile → run → test before commit</li>
+                </ul>
+            </li>
+        </ul>
+        <div class="warning">
+            ⚠️ Visually review all changes, not just trust end results<br>
+        </div>
+        <div class="slide-number">9 / 29</div>
+    </div>
+
+    <!-- Slide 13: Best Practices -->
+    <div class="slide">
+        <h2>General Best Practices</h2>
+        <div class="two-column">
+            <div>
+                <h3>Before Code</h3>
+                <ul>
+                    <li>Clarify your intent, better understand the problem</li>
+                    <li>Define constraints</li>
+                    <li>Provide relevant context only: files, imports, components, types, etc.</li>
+                </ul>
+                <h3>During Code</h3>
+                <ul>
+                    <li>Ask for plans first, review then implement</li>
+                    <li>Request smaller changes</li>
+                    <li>Review small changes, revert early, and iterate</li>
+                </ul>
+            </div>
+            <div>
+                <h3>After Code</h3>
+                <ul>
+                    <li>Review all changes, ask AI to explain</li>
+                    <li>Use lint, typecheck, build and test</li>
+                    <li>Manual test, unit tests</li>
+                    <li>Security review</li>
+                    <li>Performance check</li>
+                </ul>
+            </div>
+        </div>
+        <div class="success">
+            ✓ Workflow: Plan → Implement → Test → Review
+        </div>
+        <div class="slide-number">10 / 29</div>
+    </div>
+
+    <!-- Slide 14: Prompt Patterns -->
+    <div class="slide">
+        <h2>Prompt Patterns That Work (for CLI agents)</h2>
+        <ul>
+            <li><strong>Structure:</strong> Role • Context • Task • Constraints • Verification</li>
+            <li>Be explicit about files/scope, runtime/versions, and safety expectations</li>
+            <li>Prefer plan → apply for multi-step work; keep each step small and reviewable</li>
+            <li>Keep outputs focused and actionable; prefer commands or concise status summaries</li>
+        </ul>
+        <div class="code-block">
+<strong>Example Prompt (Refactor, File Edits Applied):</strong>
+Role: Senior TypeScript engineer.
+Context: Node 20, Jest; repo uses src/ and test/.
+Target: src/auth/token.ts#getUserToken duplicates retry/backoff logic.
+Task: Extract retry/backoff into src/utils/retry.ts and reuse it in getUserToken
+without changing external behavior.
+Constraints:
+• Keep public signatures stable
+• Do not change unrelated modules
+• Update test/auth/token.spec.ts to cover 429/503 with exponential backoff (max 3 attempts)
+Verification:
+• build passes (Node 20)
+• npm run typecheck
+• npm test -- test/auth/token.spec.ts
+Out of scope:
+• Do not modify unrelated modules or configuration files
+        </div>
+        <div class="slide-number">11 / 29</div>
+    </div>
+
+    <!-- Slide 15: Version Control -->
+    <div class="slide compact">
+        <h2>Version Control & AI Patterns</h2>
+        <h3>The Incremental Staging Pattern</h3>
+        <ul>
+            <li>1. Start new branch: <code>git checkout -b feature/ai-refactor</code></li>
+            <li>2. Ensure clean directory: <code>git status</code> shows no changes</li>
+            <li>3. Request AI to create a plan, review it, approve or request improvements, do small, focused, reviewable changes</li>
+            <li>4. Stage incrementally: <code>git add -p</code> (review each hunk)</li>
+            <li>5. Test locally: manual test, lint, type check, compile, unit tests</li>
+            <li>6. Good → commit: <code>git commit -m "[AI]: Extract retry logic"</code></li>
+            <li>7. Bad → revert: <code>git restore</code> or <code>git revert</code> and retry prompt</li>
+            <li>8. Move to next task; repeat for multi-step work</li>
+        </ul>
+        <div class="code-block">
+git checkout -b feature/ai-refactor
+git add -p  # Review hunks interactively
+git commit -m "[AI]: Extract retry logic"
+git restore --staged .  # Unstage if needed (avoid reset --hard)
+        </div>
+        <div class="slide-number">12 / 29</div>
+    </div>
+
+    <!-- Slide 16: Planning Features -->
+    <div class="slide">
+        <h2>Planning-First for Big Features</h2>
+        <div style="background: #e8f4f8; padding: 12px; border-radius: 8px; margin-bottom: 20px;">
+            <p style="margin: 0; font-size: 20px; color: #2c3e50; text-align: center;">
+                <strong>Use AI to plan large features upfront → Break into manageable subtasks → Reduce risk</strong>
+            </p>
+        </div>
+
+        <div style="background: #f0f9ff; border-left: 5px solid #3b82f6; padding: 20px; margin: 15px 0; border-radius: 4px;">
+            <h3 style="margin: 0 0 10px 0; color: #3b82f6; font-size: 28px;">Step 1: Describe the Feature</h3>
+            <ul style="margin: 10px 0; padding-left: 25px;">
+                <li>Current state, requirements, constraints. Include UI screenshots, wireframes, diagrams, etc.</li>
+            </ul>
+            <div style="background: white; padding: 10px; border-radius: 4px; margin-top: 10px;">
+                <code style="font-size: 16px; color: #555;">"As a product architect, summarize this feature spec: [details]"</code>
+            </div>
+        </div>
+
+        <div style="background: #f0fdf4; border-left: 5px solid #10b981; padding: 20px; margin: 15px 0; border-radius: 4px;">
+            <h3 style="margin: 0 0 10px 0; color: #10b981; font-size: 28px;">Step 2: Request Implementation Plan</h3>
+            <ul style="margin: 0px 0; padding-left: 25px;">
+                <li>Break into smaller subtasks</li>
+            </ul>
+            <div style="background: white; padding: 10px; border-radius: 4px; margin-top: 10px;">
+                <code style="font-size: 16px; color: #555;">"Create plan for [feature]: subtasks, dependencies, save as Markdown [feature-name]-plan.md"</code>
+            </div>
+        </div>
+
+        <div style="background: #fef3c7; border-left: 5px solid #f59e0b; padding: 20px; margin: 15px 0; border-radius: 4px;">
+            <h3 style="margin: 0 0 10px 0; color: #f59e0b; font-size: 28px;">Step 3: Review & Approve</h3>
+            <ul style="margin: 10px 0; padding-left: 25px;">
+                <li>Get your approval before implementation or request changes</li>
+            </ul>
+            <div style="background: white; padding: 10px; border-radius: 4px; margin-top: 10px;">
+                <code style="font-size: 16px; color: #555;">"Start implementation of subtask 1 from [feature-name]-plan.md"</code>
+            </div>
+        </div>
+
+        <div class="slide-number">13 / 29</div>
+    </div>
+
+    <!-- Slide 17: Git Commands -->
+    <div class="slide compact">
+        <h2>Essential Git Commands for AI Work</h2>
+        <ul>
+            <li><code>git switch -c ai/&lt;feature&gt;</code> — Create dedicated AI branch</li>
+            <li><code>git add -p</code> — Stage specific hunks</li>
+            <li><code>git restore --staged .</code> — Unstage to retry</li>
+            <li><code>git diff --staged</code> — Verify changes</li>
+            <li><code>git stash</code> — Quick save when AI goes off-track</li>
+            <li><code>git commit -m "[AI] checkpoint: desc"</code></li>
+            <li><code>git revert HEAD</code> — Safe undo</li>
+            <li><code>git log --grep="[AI]"</code> — Track AI commits</li>
+            <li><code>git rebase -i</code> — Clean before PR</li>
+            <li>pre-commit hooks — Auto-lint/format before commit</li>
+        </ul>
+        <div style="background: #fff3cd; border-left: 5px solid #f39c12; padding: 20px; margin: 30px 0; border-radius: 4px; font-size: 24px; color: #856404;">
+            ⚠️ Avoid <code>reset --hard</code>
+        </div>
+        <div class="slide-number">14 / 29</div>
+    </div>
+
+    <!-- Slide 18: Testing AI Code -->
+    <div class="slide">
+        <h2>Testing AI-Generated Code</h2>
+        <div style="background: #e8f4f8; padding: 12px; border-radius: 8px; margin-bottom: 20px;">
+            <p style="margin: 0; font-size: 22px; color: #2c3e50; text-align: center;">
+                <strong>AI code needs extra testing — it makes creative mistakes</strong>
+            </p>
+        </div>
+
+        <ul>
+            <li><strong>Property-Based Testing:</strong> Define invariants, auto-generate diverse inputs
+                <ul>
+                    <li>AI often misses edge cases — good unit tests help to expose them</li>
+                </ul>
+            </li>
+            <li><strong>Mutation Testing:</strong> Verify test quality by introducing small bugs
+                <ul>
+                    <li>If tests don't catch the bugs, they need improvement</li>
+                    <li>Especially important for AI-generated code</li>
+                </ul>
+            </li>
+            <li><strong>Weakness Detection:</strong> Use AI against itself
+                <ul>
+                    <li><code>"Find 3 ways to break this function, including edge cases"</code></li>
+                    <li>AI suggests: huge inputs, duplicates, non-comparable types</li>
+                </ul>
+            </li>
+            <li><strong>Browser Testing with MCP:</strong> AI can control browser for automated testing
+                <ul>
+                    <li>Model Context Protocol (MCP) enables AI to interact with Chrome</li>
+                    <li>AI can navigate, click, fill forms, verify UI behavior, check console logs and errors</li>
+                    <li>Example: <code>github.com/hangwin/mcp-chrome</code></li>
+                </ul>
+            </li>
+            <li><span class="emphasis">Golden Rule:</span> <span class="highlight">AI code → Human tests | Human reviews → AI tests</span>
+                <ul>
+                    <li>Balance automation with human judgment in the middle to avoid false positives</li>
+                    <li>Always run existing tests before committing AI changes</li>
+                    <li>If AI wrote it, add at least one property-based test or mutation-killing assertion</li>
+                </ul>
+            </li>
+        </ul>
+        <div class="slide-number">15 / 29</div>
+    </div>
+
+    <!-- Slide 19: Performance & Reviews -->
+    <div class="slide">
+        <h2>Performance Awareness & AI-Assisted Reviews</h2>
+        <div style="background: #e8f4f8; padding: 12px; border-radius: 8px; margin-bottom: 20px;">
+            <p style="margin: 0; font-size: 22px; color: #2c3e50; text-align: center;">
+                <strong>AI code often needs optimization — combine performance checks with AI reviews</strong>
+            </p>
+        </div>
+
+        <div class="two-column">
+            <div>
+                <h3>Performance Issues to Watch</h3>
+                <ul style="font-size: 22px;">
+                    <li>Inefficient database queries</li>
+                    <li>Too many nested loops</li>
+                    <li>Blocking I/O operations</li>
+                    <li>Memory leaks in handlers</li>
+                </ul>
+            </div>
+            <div>
+                <h3>AI Double-Loop Reviews</h3>
+                <ul style="font-size: 22px;">
+                    <li>Ask for risk analysis and efficiency</li>
+                    <li>Request missing test cases</li>
+                    <li>Generate PR descriptions</li>
+                    <li>Review for security, performance, edge cases</li>
+                </ul>
+                <div style="margin-top: 15px;">
+                    <code style="font-size: 18px;">"Find 3 issues with this code and suggest fixes"</code>
+                </div>
+            </div>
+        </div>
+
+        <div class="warning" style="margin-top: 20px;">
+            ⚠️ Never skip human review—assume AI is wrong until tests and profiling say otherwise
+        </div>
+
+        <div class="success" style="margin-top: 10px;">
+            ✓ When creating a PR, ask: "Write a concise PR description from these changes: [summary]"
+        </div>
+        <div class="slide-number">16 / 29</div>
+    </div>
+
+    <!-- Slide 21: Safety -->
+    <div class="slide">
+        <h2>Data & Safety Guardrails</h2>
+        <div style="background: #e8f4f8; padding: 12px; border-radius: 8px; margin-bottom: 20px;">
+            <p style="margin: 0; font-size: 20px; color: #2c3e50; text-align: center;">
+                <strong>Protect customer data, secrets, and IP while integrating AI safely</strong>
+            </p>
+        </div>
+
+        <ul>
+            <li><strong>Never Paste Secrets or Tokens</strong>
+                <ul>
+                    <li>Use placeholders like <code>[API_KEY]</code> and replace post-generation</li>
+                    <li>Configure AI tools to auto-redact sensitive patterns</li>
+                </ul>
+            </li>
+            <li><strong>Mask Customer Data</strong>
+                <ul>
+                    <li>Use synthetic data: <code>user_1@example.com</code> instead of real emails</li>
+                </ul>
+            </li>
+            <li><strong>Tag AI Commits:</strong> Use <code>[AI]</code> prefix for transparency</li>
+            <li><strong>Use Secrets Managers</strong>
+                <ul>
+                    <li>Never paste tokens into prompts</li>
+                    <li>Use environment variables or secret management tools</li>
+                </ul>
+            </li>
+            <li><strong>Review License Obligations</strong>
+                <ul>
+                    <li>Verify licenses for generated code and suggested dependencies</li>
+                    <li>Ensure compliance with your organization's policies</li>
+                </ul>
+            </li>
+            <li><strong>Use Enterprise Models for Private Code</strong>
+                <ul>
+                    <li>Use only enterprise or on-prem models for private repos; avoid public AI services for proprietary code</li>
+                </ul>
+            </li>
+        </ul>
+
+        <div class="slide-number">17 / 29</div>
+    </div>
+
+    <!-- Slide 22: CLI Workflow -->
+    <div class="slide">
+        <h2>CLI-first AI Workflow</h2>
+        <div style="background: #e8f4f8; padding: 12px; border-radius: 8px; margin-bottom: 15px;">
+            <p style="margin: 0; font-size: 20px; color: #2c3e50; text-align: center;">
+                <strong>Enable automation, consistency, and integration beyond IDEs</strong>
+            </p>
+        </div>
+
+        <div class="two-column">
+            <div>
+                <h3>Why CLI?</h3>
+                <ul style="font-size: 20px;">
+                    <li><strong>Scriptable:</strong> Wrap prompts in bash/python scripts</li>
+                    <li><strong>No Lock-in:</strong> Works in terminals, servers, remote</li>
+                    <li><strong>Standardize:</strong> Share configs & aliases team-wide</li>
+                </ul>
+            </div>
+            <div>
+                <h3>Codex CLI Basic Usage</h3>
+                <ul style="font-size: 20px;">
+                    <li><code>codex</code> — Interactive TUI</li>
+                    <li><code>codex "fix lint"</code> — Direct prompt</li>
+                    <li><code>codex resume --last</code> — Resume session</li>
+                    <li>Use <code>AGENTS.md</code> for repo context</li>
+                    <li><code>@</code> for fuzzy file search</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="success" style="margin-top: 20px;">
+            ✓ Workflow: Plan → Apply small step → Test → Commit
+        </div>
+        <div class="slide-number">18 / 29</div>
+    </div>
+
+    <!-- Slide 22: Codex Commands -->
+    <div class="slide">
+        <h2>Codex CLI Essential Commands</h2>
+
+        <div class="two-column">
+            <div>
+                <h3>Core Commands</h3>
+                <ul style="font-size: 20px;">
+                    <li><code>/init</code> — Create AGENTS.md file</li>
+                    <li><code>/status</code> — Show session config</li>
+                    <li><code>/approvals</code> — Set approval mode</li>
+                    <li><code>/model</code> — Choose model & effort</li>
+                    <li><code>/new</code> — Start new chat</li>
+                </ul>
+            </div>
+            <div>
+                <h3>Workflow Commands</h3>
+                <ul style="font-size: 20px;">
+                    <li><code>/review</code> — Find issues in changes</li>
+                    <li><code>/diff</code> — Show git diff</li>
+                    <li><code>/mention</code> — Reference a file</li>
+                    <li><code>/compact</code> — Summarize conversation</li>
+                    <li><code>@</code> — Fuzzy file search</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="background: #d4f4dd; padding: 15px; border-radius: 8px; margin-top: 20px; border: 1px solid #22c55e;">
+            <p style="margin: 0 0 10px 0; font-size: 18px; color: #14532d;">
+                <strong>💡 Pro Tips:</strong>
+            </p>
+            <ul style="margin: 0; padding-left: 20px; font-size: 18px; color: #166534;">
+                <li>Use Full Access mode so Codex can read files, make edits, and run commands with network access, without approval</li>
+                <li>Use git to control flow / changes</li>
+            </ul>
+        </div>
+
+        <div style="background: #e8f4f8; padding: 15px; border-radius: 8px; margin-top: 20px;">
+            <p style="margin: 0; font-size: 18px; color: #2c3e50; text-align: center;">
+                <strong>Full reference:</strong> <a href="OpenAI Codex CLI Cheatsheet.md" target="_blank" style="color: #0047BA; text-decoration: none; border-bottom: 1px dotted #0047BA;">OpenAI Codex CLI Cheatsheet</a> for complete command list
+            </p>
+        </div>
+
+        <div class="slide-number">19 / 29</div>
+    </div>
+
+    <!-- Slide 23: CLI Example -->
+    <div class="slide">
+        <h2>Codex CLI Workflow Example</h2>
+
+        <div style="background: #f8f9fa; border-left: 4px solid #0047BA; padding: 15px; margin: 15px 0; border-radius: 4px;">
+            <h3 style="margin: 0 0 10px 0; color: #0047BA;">1. Start Codex CLI & Create Plan</h3>
+            <code style="font-size: 20px; display: block;">$ codex</code>
+            <code style="font-size: 20px; display: block; margin-top: 5px;">→ Create a plan for retry logic with exponential backoff. Save to retry-plan.md</code>
+        </div>
+
+        <div style="background: #f8f9fa; border-left: 4px solid #0047BA; padding: 15px; margin: 15px 0; border-radius: 4px;">
+            <h3 style="margin: 0 0 10px 0; color: #0047BA;">2. Review Plan (team/human review)</h3>
+            <code style="font-size: 20px; display: block;">$ cat retry-plan.md</code>
+            <span style="color: #7f8c8d; font-style: italic;">← Get approval before proceeding</span>
+        </div>
+
+        <div style="background: #f8f9fa; border-left: 4px solid #0047BA; padding: 15px; margin: 15px 0; border-radius: 4px;">
+            <h3 style="margin: 0 0 10px 0; color: #0047BA;">3. Execute Approved Plan</h3>
+            <code style="font-size: 20px; display: block;">$ codex</code>
+            <code style="font-size: 20px; display: block; margin-top: 5px;">→ Implement step 1 from retry-plan.md. Run tests after changes.</code>
+        </div>
+
+        <div style="background: #f8f9fa; border-left: 4px solid #0047BA; padding: 15px; margin: 15px 0; border-radius: 4px;">
+            <h3 style="margin: 0 0 10px 0; color: #0047BA;">4. Stage & Commit if Good</h3>
+            <code style="font-size: 20px; display: block;">$ git add -p</code>
+            <code style="font-size: 20px; display: block; margin-top: 5px;">$ git commit -m "[AI]: Implement retry logic step 1"</code>
+        </div>
+
+        <div style="background: #f8f9fa; border-left: 4px solid #0047BA; padding: 15px; margin: 15px 0; border-radius: 4px;">
+            <h3 style="margin: 0 0 10px 0; color: #0047BA;">5. Run Full Test Suite & Push</h3>
+            <code style="font-size: 20px; display: block;">$ npm test</code>
+            <code style="font-size: 20px; display: block; margin-top: 5px;">$ git push -u origin ai/retry-logic</code>
+            <span style="color: #7f8c8d; font-style: italic;">→ Open PR for review</span>
+        </div>
+
+        <div class="slide-number">20 / 29</div>
+    </div>
+
+    <!-- Slide 24: Context Switching -->
+    <div class="slide">
+        <h2>The Context Switching Cost</h2>
+        <ul>
+            <li><strong>Batch similar tasks</strong>
+                <ul>
+                    <li>All tests, then all refactors</li>
+                </ul>
+            </li>
+            <li><strong>Save successful prompts in team knowledge base</strong></li>
+            <li><strong>Build context once</strong>, use many times</li>
+            <li><strong>When AI gets stuck:</strong> Clear context, simplify request, provide working example</li>
+            </li>
+            <li><strong>15-minute rule:</strong>
+                <ul>
+                    <li>If stuck → change approach or better start over</li>
+                </ul>
+            </li>
+        </ul>
+
+        <div style="background: #d4f4dd; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #22c55e;">
+            <p style="margin: 0; font-size: 22px; color: #166534; font-weight: 500;">
+                💡 <strong>Tip:</strong> Provide a minimal snippet instead of the entire file when requesting a specific change
+            </p>
+        </div>
+
+        <div class="warning">
+            ⚠️ If the session gets long/noisy, summarize or start a fresh session
+        </div>
+
+        <div class="slide-number">21 / 29</div>
+    </div>
+
+    <!-- Slide 25: Code Smells -->
+    <div class="slide">
+        <h2>Bad Patterns in AI Code</h2>
+        <ul>
+            <li><strong>Generic variable names</strong>
+                <ul>
+                    <li><code>data</code>, <code>item</code>, <code>result</code></li>
+                </ul>
+            </li>
+            <li><strong>Code structure issues</strong>
+                <ul>
+                    <li>Deeply nested ifs or loops</li>
+                    <li>Overly "clever" one-liners</li>
+                    <li>Unnecessary layers of indirection that obscure control flow</li>
+                </ul>
+            </li>
+            <li><strong>Missing safeguards</strong>
+                <ul>
+                    <li>No error boundaries</li>
+                    <li>Hardcoded values</li>
+                    <li>Catching and swallowing errors without logging or remediation</li>
+                </ul>
+            </li>
+            <li><strong>Debug artifacts</strong>
+                <ul>
+                    <li>Too many console.logs and comments</li>
+                    <li>Unnecessary type assertions</li>
+                    <li>Unused or redundant imports</li>
+                </ul>
+            </li>
+        </ul>
+        <div class="warning">
+            ⚠️ You should catch those issues and fix before creating PR
+        </div>
+        <div class="slide-number">25 / 29</div>
+    </div>
+
+    <!-- Slide 26: Human Skills -->
+    <div class="slide">
+        <h2>Human Skills That Matter More</h2>
+        <ul>
+            <li><span class="emphasis">System design</span> (AI can't architect)</li>
+            <li><span class="emphasis">Code review</span> (3x more important)</li>
+            <li><span class="emphasis">Specification writing</span> = new programming</li>
+            <li><span class="emphasis">Domain expertise</span> = your differentiator</li>
+            <li><span class="emphasis">Debugging intuition</span></li>
+        </ul>
+
+        <div style="background: #d4f4dd; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #22c55e; border-right: 8px solid #22c55e;">
+            <p style="margin: 0; font-size: 22px; color: #166534; font-weight: 500;">
+                💡 Strong fundamentals matter MORE, not less
+            </p>
+        </div>
+
+        <div class="warning">
+            ⚠️ AI amplifies both good and bad practices
+        </div>
+        <div class="slide-number">26 / 29</div>
+    </div>
+
+    <!-- Slide 27: Key Takeaways -->
+    <div class="slide">
+        <h2>Key Takeaways</h2>
+        <ul>
+            <li>AI is a <span class="emphasis">tool, not a replacement</span> for developers</li>
+            <li>Small, verifiable changes win</li>
+            <li>Context is everything, use it wisely</li>
+            <li>Don't trust—verify</li>
+            <li>Your skills become <span class="emphasis">MORE valuable</span>, focus on patterns</li>
+            <li>Plan, guide, review, and accept—you stay in control</li>
+            <li>Start small. Ship safely. Measure impact.</li>
+        </ul>
+        <div class="slide-number">27 / 29</div>
+    </div>
+
+    <!-- Extra slides for specific topics -->
+    <!-- Slide 28: Practical Workflow -->
+    <div class="slide">
+        <h2>Practical AI Workflow</h2>
+        <div class="two-column" style="gap: 30px;">
+            <div style="flex: 1;">
+                <h3 style="margin-bottom: 15px; font-size: 26px;">Effective Prompts</h3>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                    <div style="margin-bottom: 15px;">
+                        <strong style="font-size: 20px;">Planning:</strong>
+                        <div style="background: white; padding: 8px; border-radius: 4px; margin-top: 5px; font-size: 18px; border: 1px solid #e2e8f0;">
+                            "Create plan for [feature]. Save to [feature].md for review"
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <strong style="font-size: 20px;">Bugfix:</strong>
+                        <div style="background: white; padding: 8px; border-radius: 4px; margin-top: 5px; font-size: 18px; border: 1px solid #e2e8f0;">
+                            "Fix [bug] in [file]. Include test."
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <strong style="font-size: 20px;">Refactor:</strong>
+                        <div style="background: white; padding: 8px; border-radius: 4px; margin-top: 5px; font-size: 18px; border: 1px solid #e2e8f0;">
+                            "Extract [logic] to [target dir]."
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <strong style="font-size: 20px;">Testing:</strong>
+                        <div style="background: white; padding: 8px; border-radius: 4px; margin-top: 5px; font-size: 18px; border: 1px solid #e2e8f0;">
+                            "Add tests for [file] edge cases."
+                        </div>
+                    </div>
+
+                    <div>
+                        <strong style="font-size: 20px;">Docs:</strong>
+                        <div style="background: white; padding: 8px; border-radius: 4px; margin-top: 5px; font-size: 18px; border: 1px solid #e2e8f0;">
+                            "Document [API] with examples."
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="flex: 1;">
+                <h3 style="margin-bottom: 15px; font-size: 26px;">Git Safety Flow</h3>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                    <ol style="margin: 0; padding-left: 20px; font-size: 19px; line-height: 1.8;">
+                        <li>Start with <strong>clean dir</strong></li>
+                        <li>Have AI make <strong>one small change</strong></li>
+                        <li><code style="background: #fff; padding: 2px 6px; border-radius: 3px; border: 1px solid #e2e8f0;">git add -p</code> → review</li>
+                        <li><strong>Test locally</strong> first</li>
+                        <li>Pass? → <strong>commit</strong></li>
+                        <li>Fail? → <code style="background: #fff; padding: 2px 6px; border-radius: 3px; border: 1px solid #e2e8f0;">git restore --staged</code></li>
+                        <li><strong>Iterate</strong> with better prompt</li>
+                    </ol>
+
+                    <div style="background: #fef3c7; padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px solid #fbbf24;">
+                        <p style="margin: 0; font-size: 20px; color: #92400e; text-align: center; font-weight: 600;">
+                            <strong>Golden Rule:</strong> Smaller changes = Easy rollbacks
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">28 / 29</div>
+    </div>
+
+    <!-- Slide 29: Thank You -->
+    <div class="slide title-slide">
+        <h1>Thank You!</h1>
+        <div class="subtitle">AI Coding Best Practices & Patterns for Modern Development</div>
+        <div class="presenter">
+            <strong>Sergey Kurdin</strong><br>
+            CRL: sergey.kurdin@crl.com<br><br>
+
+            LinkedIn: <a href="https://www.linkedin.com/in/kurdin/" target="_blank" style="color: white; text-decoration: underline;">linkedin.com/in/kurdin</a><br>
+            GitHub: @sergeykurdin<br>
+                Project: PasteBar - Free Clipboard Manager for Mac & Windows<br><br>
+        </div>
+
+        <div style="margin-top: 40px;">
+            <button onclick="currentSlide = 1; showSlide(1);" style="background: white; color: #0047BA; padding: 12px 30px; font-size: 20px; border: 2px solid white;">
+                ↻ Start Over
+            </button>
+        </div>
+
+        <div class="slide-number">29 / 29</div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls-trigger"></div>
+    <div class="controls">
+        <button id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+        <span class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">29</span>
+        </span>
+        <button id="nextBtn" onclick="changeSlide(1)">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 29;
+        let controlsTimeout;
+        let mouseTimeout;
+
+        function updateURL() {
+            window.location.hash = `slide-${currentSlide}`;
+        }
+
+        function loadSlideFromURL() {
+            const hash = window.location.hash;
+            if (hash) {
+                const slideNum = parseInt(hash.replace('#slide-', ''));
+                if (slideNum && slideNum >= 1 && slideNum <= totalSlides) {
+                    currentSlide = slideNum;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function showSlide(n) {
+            const slides = document.getElementsByClassName('slide');
+            if (n > totalSlides) currentSlide = 1;
+            if (n < 1) currentSlide = totalSlides;
+
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].classList.remove('active');
+            }
+
+            slides[currentSlide - 1].classList.add('active');
+            document.getElementById('currentSlide').textContent = currentSlide;
+
+            // Update button states
+            document.getElementById('prevBtn').disabled = currentSlide === 1;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+
+            // Update URL
+            updateURL();
+        }
+
+        function changeSlide(n) {
+            currentSlide += n;
+            showSlide(currentSlide);
+            showControlsTemporarily();
+        }
+
+        // Show controls temporarily when using keyboard/buttons
+        function showControlsTemporarily() {
+            const controls = document.querySelector('.controls');
+            controls.classList.add('visible');
+            
+            // Clear existing timeout
+            if (controlsTimeout) clearTimeout(controlsTimeout);
+            
+            // Fade out completely after 2 seconds
+            controlsTimeout = setTimeout(() => {
+                controls.classList.remove('visible');
+            }, 2000);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                changeSlide(1);
+            }
+            if (e.key === 'Home') { 
+                currentSlide = 1; 
+                showSlide(1); 
+                showControlsTemporarily();
+            }
+            if (e.key === 'End') { 
+                currentSlide = totalSlides; 
+                showSlide(totalSlides); 
+                showControlsTemporarily();
+            }
+            
+            // Show hint briefly
+            const hint = document.getElementById('keyboardHint');
+            hint.classList.add('visible');
+            setTimeout(() => hint.classList.remove('visible'), 2000);
+        });
+
+        // Mouse movement detection
+        document.addEventListener('mousemove', function(e) {
+            const controls = document.querySelector('.controls');
+            
+            // Check if mouse is in bottom area
+            if (e.clientY > window.innerHeight - 150) {
+                controls.classList.add('visible');
+                
+                // Clear timeout if hovering in bottom area
+                if (mouseTimeout) clearTimeout(mouseTimeout);
+            } else {
+                // If not in bottom area, set timeout to hide
+                if (mouseTimeout) clearTimeout(mouseTimeout);
+                
+                mouseTimeout = setTimeout(() => {
+                    if (!controls.matches(':hover')) {
+                        controls.classList.remove('visible');
+                    }
+                }, 1500);
+            }
+        });
+
+        // Keep controls visible while hovering
+        document.querySelector('.controls').addEventListener('mouseenter', function() {
+            if (mouseTimeout) clearTimeout(mouseTimeout);
+        });
+
+        // Hide controls when mouse leaves
+        document.querySelector('.controls').addEventListener('mouseleave', function() {
+            const controls = this;
+            mouseTimeout = setTimeout(() => {
+                controls.classList.remove('visible');
+            }, 500);
+        });
+
+        // Touch support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+            showControlsTemporarily(); // Show controls on touch
+        });
+
+        document.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) changeSlide(1); // Swipe left
+            if (touchEndX > touchStartX + 50) changeSlide(-1); // Swipe right
+        }
+
+        // Initialize - check URL first, otherwise default to slide 1
+        if (!loadSlideFromURL()) {
+            currentSlide = 1;
+        }
+        showSlide(currentSlide);
+
+        // Handle browser back/forward buttons
+        window.addEventListener('hashchange', function() {
+            if (loadSlideFromURL()) {
+                showSlide(currentSlide);
+            }
+        });
+        
+        // Show controls initially for 3 seconds
+        setTimeout(() => {
+            const controls = document.querySelector('.controls');
+            controls.classList.add('visible');
+            
+            setTimeout(() => {
+                controls.classList.remove('visible');
+            }, 3000);
+        }, 500);
+        
+        // Show keyboard hint on load
+        setTimeout(() => {
+            document.getElementById('keyboardHint').classList.add('visible');
+            setTimeout(() => document.getElementById('keyboardHint').classList.remove('visible'), 3000);
+        }, 1000);
+    </script>
+</body>
+</html>
