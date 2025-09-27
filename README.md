@@ -1,7 +1,7 @@
 # Code with AI
 ## AI Coding Best Practices for Modern Development
 
-🔗 **[View Interactive Presentation Online](https://kurdin.github.io/ai-coding-best-practices-for-modern-development/)**
+**[View Interactive Presentation Online](https://kurdin.github.io/ai-coding-best-practices-for-modern-development/)**
 
 **Presenter:** Sergey Kurdin
 
