@@ -4,10 +4,11 @@
 🔗 **[View Interactive Presentation Online](https://kurdin.github.io/ai-coding-best-practices-for-modern-development/)**
 
 **Presenter:** Sergey Kurdin
+
 Senior Developer at Charles River Labs (Apollo SA project)
-30+ years building software
-Built and shipped products at Marriott.com, Ski.com, It.com, Amazon, NIH, and multiple startups
-[PasteBar App](https://github.com/PasteBar/PasteBarApp) Maintainer - Free, Open Source Clipboard Manager for Mac & Windows (1.7k★ on GitHub)
+- 30+ years building software
+- Built and shipped products at Marriott.com, Ski.com, It.com, Amazon, NIH, and multiple startups
+- [PasteBar App](https://github.com/PasteBar/PasteBarApp) Maintainer - Free, Open Source Clipboard Manager for Mac & Windows (1.7k★ on GitHub)
 
 ---
 
