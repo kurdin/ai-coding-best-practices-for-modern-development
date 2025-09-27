@@ -295,7 +295,6 @@ git restore --staged .  # Unstage if needed (avoid reset --hard)
 - `git add -p` — Stage specific hunks
 - `git restore --staged .` — Unstage to retry
 - `git diff --staged` — Verify changes
-- `git stash` — Quick save when AI goes off-track
 - `git commit -m "[AI] checkpoint: desc"`
 - `git revert HEAD` — Safe undo
 - `git log --grep="[AI]"` — Track AI commits
