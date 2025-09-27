@@ -25,6 +25,8 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
+        with:
+          enablement: true
 
       - name: Copy HTML to index.html
         run: cp ai-coding-best-practices.html index.html
