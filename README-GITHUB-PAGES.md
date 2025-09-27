@@ -2,16 +2,26 @@
 
 This repository is configured to automatically deploy the AI Coding Best Practices presentation to GitHub Pages.
 
-## Setup Instructions
+## ⚠️ IMPORTANT: Initial Setup Required
 
-1. **Enable GitHub Pages in Repository Settings:**
-   - Go to Settings → Pages
-   - Under "Source", select "GitHub Actions"
+**You MUST manually enable GitHub Pages first:**
 
-2. **The workflow will automatically:**
-   - Copy `ai-coding-best-practices.html` to `index.html`
-   - Deploy all files including the cheatsheets
-   - Make the presentation available at: `https://[username].github.io/[repository-name]/`
+1. **Go to your repository on GitHub**
+2. **Navigate to Settings → Pages** (in the left sidebar)
+3. **Under "Source", select "GitHub Actions"**
+4. **Click Save**
+5. **Then push your code or re-run the workflow**
+
+## Why Manual Setup?
+
+GitHub requires repository owners to explicitly enable Pages for security reasons. The workflow cannot automatically enable it due to permission restrictions.
+
+## After Initial Setup
+
+Once Pages is enabled, the workflow will automatically:
+- Copy `ai-coding-best-practices.html` to `index.html`
+- Deploy all files including the cheatsheets
+- Make the presentation available at: `https://[username].github.io/[repository-name]/`
 
 ## Files Deployed
 

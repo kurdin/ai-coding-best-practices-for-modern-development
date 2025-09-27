@@ -11,6 +11,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  actions: read
 
 concurrency:
   group: "pages"
@@ -25,8 +26,7 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
-        with:
-          enablement: true
+        continue-on-error: true
 
       - name: Copy HTML to index.html
         run: cp ai-coding-best-practices.html index.html
