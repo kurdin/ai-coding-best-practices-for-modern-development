@@ -44,7 +44,11 @@ Once deployed, your presentation will be available at:
 https://[your-github-username].github.io/aI-coding-best-practices-for-modern-development/
 ```
 
-The cheatsheets will be accessible at:
+The cheatsheets will be accessible as styled HTML pages at:
+- Claude Code Cheatsheet: `https://[username].github.io/[repo]/claude-code-cheatsheet.html`
+- OpenAI Codex Cheatsheet: `https://[username].github.io/[repo]/openai-codex-cheatsheet.html`
+
+Original markdown files are also available:
 - `https://[username].github.io/[repo]/Claude%20Code%20CLI%20Cheatsheet.md`
 - `https://[username].github.io/[repo]/OpenAI%20Codex%20CLI%20Cheatsheet.md`
 
