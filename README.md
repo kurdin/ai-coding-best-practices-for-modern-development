@@ -5,7 +5,7 @@
 Senior Developer at Charles River Labs (Apollo SA project)  
 30+ years building software  
 Built and shipped products at Marriott.com, Ski.com, It.com, Amazon, NIH, and multiple startups  
-PasteBar App Maintainer - Free, Open Source Clipboard Manager for Mac & Windows (1.7k★ on GitHub)
+[PasteBar App](https://github.com/PasteBar/PasteBarApp) Maintainer - Free, Open Source Clipboard Manager for Mac & Windows (1.7k★ on GitHub)
 
 ---
 
@@ -15,9 +15,9 @@ PasteBar App Maintainer - Free, Open Source Clipboard Manager for Mac & Windows 
 - **Understanding AI:** How LLMs work & context windows
 - **Best Practices:** Prompting patterns & planning-first approach
 - **Git Workflow:** Safe version control & incremental commits
-- **CLI-first Agents:** Essential commands & workflow
+- **CLI-first Agents:** Common commands & workflow (tool-agnostic)
 - **Quality Control:** Testing, reviews & catching bad patterns
-- **Limits & Safety:** When NOT to use AI & security guardrails
+- **Limits & Safety:** AI security guardrails
 - **Human Skills:** What matters MORE with AI
 - **Key Takeaways:** Start small, verify everything
 
@@ -34,7 +34,7 @@ PasteBar App Maintainer - Free, Open Source Clipboard Manager for Mac & Windows 
 - GitHub Copilot → Inline autocomplete
 
 ### Modern Coding Agents
-- Claude Code, Codex CLI, Cursor, Gemini Code Assist, Windsurf
+- Claude Code, Codex CLI, Cursor, Windsurf, Gemini Code Assist
 - Understand repo structure & context
 - Planning first, then implementation
 - Plan → apply small step → test → iterate (repo-aware, reviewable edits)
@@ -69,12 +69,12 @@ PasteBar App Maintainer - Free, Open Source Clipboard Manager for Mac & Windows 
 - Q&A and code generation via chat
 
 ### CLI-first Coding Agents **Most Powerful**
-- Codex CLI, Claude Code, Cursor, Windsurf
+- Claude Code, Codex CLI, Cursor, Windsurf, Gemini Code Assist
 - Understand entire repository structure
 - Plan → Review → Implement workflow
 - Direct file editing with reviewable changes
 
-✓ Focus on patterns, not specific tools — they all follow similar principles
+✓ Focus on patterns, not brands — most agents support similar flows
 
 ---
 
@@ -386,77 +386,82 @@ git restore --staged .  # Unstage if needed (avoid reset --hard)
 
 ---
 
-## CLI-first AI Workflow
+## CLI-first AI Workflow (Tool-Agnostic)
 
-**Enable automation, consistency, and integration beyond IDEs**
+**Automation, consistency, CI/CD-friendly**
 
 ### Why CLI?
 - **Scriptable:** Wrap prompts in bash/python scripts
-- **No Lock-in:** Works in terminals, servers, remote
+- **Portable:** Works in terminals, servers, remote
 - **Standardize:** Share configs & aliases team-wide
 
-### Codex CLI Basic Usage
-- `codex` — Interactive TUI
-- `codex "fix lint"` — Direct prompt
-- `codex resume --last` — Resume session
-- Use `AGENTS.md` for repo context
-- `@` for fuzzy file search
+### Common Agent Capabilities
+- Plan / Review / Diff / Apply
+- Mention files or folders
+- Search or fuzzy-find files
+- Resume sessions, compact/summarize
 
-✓ Workflow: Plan → Apply small step → Test → Commit
+✓ Flow: Plan → Diff preview → Apply small step → Test → Commit
 
 ---
 
-## Codex CLI Essential Commands
+## Common CLI Agent Commands (Generic)
 
-### Core Commands
-- `/init` — Create AGENTS.md file
-- `/status` — Show session config
-- `/approvals` — Set approval mode
-- `/model` — Choose model & effort
-- `/new` — Start new chat
+### Session & Config
+- `/init` — Generate `AGENTS.md` / set context
+- `/status` — Show settings
+- `/model` — Pick model/effort level
+- `/new` or `/resume` — Session control
 
-### Workflow Commands
-- `/review` — Find issues in changes
-- `/diff` — Show git diff
-- `/mention` — Reference a file
-- `/compact` — Summarize conversation
+### Workflow
+- `/plan` — Propose steps
+- `/diff` — Preview changes
+- `/apply` — Apply edits
+- `/review` — Critique changes
+- `/mention` — Add files to context
 - `@` — Fuzzy file search
 
-💡 **Pro Tips:**
-- Use Full Access mode so Codex can read files, make edits, and run commands with network access, without approval
-- Use git to control flow / changes
+### About AGENTS.md Files
+- CLI agents automatically detect and use `AGENTS.md` files for context
+- Use **multiple AGENTS.md files** for different repo areas:
+  - `backend/AGENTS.md` — API-specific patterns & rules
+  - `frontend/AGENTS.md` — UI conventions & components
+  - `libs/AGENTS.md` — Component library guidelines
+- Each file provides domain-specific context to guide AI behavior
 
-**Full reference:** OpenAI Codex CLI Cheatsheet for complete command list
+📚 **CLI-Specific References:**
+- [Claude Code CLI Cheatsheet](Claude%20Code%20CLI%20Cheatsheet.md)
+- [OpenAI Codex CLI Cheatsheet](OpenAI%20Codex%20CLI%20Cheatsheet.md)
 
 ---
 
-## Codex CLI Workflow Example
+## CLI Agent Workflow Example (Generic)
 
-### 1. Start Codex CLI & Create Plan
+### 1. Start & Create Plan
 ```
-$ codex
-→ Create a plan for retry logic with exponential backoff. Save to retry-plan.md
+$ claude | codex
+→ Plan retry logic with exponential backoff; save to retry-plan.md
 ```
 
-### 2. Review Plan (team/human review)
+### 2. Review Plan
 ```
 $ cat retry-plan.md
 ```
-← Get approval before proceeding
+← Approve before applying
 
-### 3. Execute Approved Plan
+### 3. Execute Approved Step
 ```
-$ codex
-→ Implement step 1 from retry-plan.md. Run tests after changes.
+$ claude | codex
+→ Implement step 1 from retry-plan.md; run tests after changes
 ```
 
-### 4. Stage & Commit if Good
+### 4. Stage & Commit
 ```
 $ git add -p
 $ git commit -m "[AI]: Implement retry logic step 1"
 ```
 
-### 5. Run Full Test Suite & Push
+### 5. Test & Push
 ```
 $ npm test
 $ git push -u origin ai/retry-logic
@@ -583,7 +588,7 @@ CRL: sergey.kurdin@crl.com
 
 LinkedIn: [linkedin.com/in/kurdin](https://www.linkedin.com/in/kurdin/)  
 GitHub: @sergeykurdin  
-Project: PasteBar - Free Clipboard Manager for Mac & Windows
+Project: [PasteBar](https://github.com/PasteBar/PasteBarApp) - Free Clipboard Manager for Mac & Windows
 
 ## Contact
 
