@@ -1,0 +1,47 @@
+# GitHub Pages Deployment
+
+This repository is configured to automatically deploy the AI Coding Best Practices presentation to GitHub Pages.
+
+## Setup Instructions
+
+1. **Enable GitHub Pages in Repository Settings:**
+   - Go to Settings → Pages
+   - Under "Source", select "GitHub Actions"
+
+2. **The workflow will automatically:**
+   - Copy `ai-coding-best-practices.html` to `index.html`
+   - Deploy all files including the cheatsheets
+   - Make the presentation available at: `https://[username].github.io/[repository-name]/`
+
+## Files Deployed
+
+- `index.html` (main presentation)
+- `Claude Code CLI Cheatsheet.md`
+- `OpenAI Codex CLI Cheatsheet.md`
+- `README.md`
+
+## Deployment Triggers
+
+The GitHub Pages deployment runs on:
+- Push to `main` branch
+- Pull requests to `main` branch
+- Manual trigger via GitHub Actions tab
+
+## Access Your Deployed Site
+
+Once deployed, your presentation will be available at:
+```
+https://[your-github-username].github.io/aI-coding-best-practices-for-modern-development/
+```
+
+The cheatsheets will be accessible at:
+- `https://[username].github.io/[repo]/Claude%20Code%20CLI%20Cheatsheet.md`
+- `https://[username].github.io/[repo]/OpenAI%20Codex%20CLI%20Cheatsheet.md`
+
+## Manual Deployment
+
+To manually trigger a deployment:
+1. Go to Actions tab
+2. Select "Deploy to GitHub Pages" workflow
+3. Click "Run workflow"
+4. Select the branch and click "Run workflow"
